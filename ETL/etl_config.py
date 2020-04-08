@@ -31,12 +31,15 @@
 #
 # print(data == data_loaded)
 
-PATH_RAW_DATA = '../data/'
+PATH_RAW_DATA = '../data_1/'
 PATH_RAW_DATA_TRAIN = PATH_RAW_DATA + 'train/'
 PATH_RAW_DATA_TEST = PATH_RAW_DATA + 'test/'
 
 PATH_DATASET = PATH_RAW_DATA + 'dataset/'
 
+PATH_MODEL = PATH_RAW_DATA + 'model/'
+FILE_MODEL = PATH_MODEL + 'xgb_model.pkl'
+FILE_SCALER = PATH_MODEL + 'model_scaler.pkl'
 
 # Следует из исходных данных
 CHURNED_START_DATE = '2019-09-01'
