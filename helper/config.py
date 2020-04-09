@@ -1,3 +1,7 @@
+import yaml
+from pprint import pprint
+from helper.logging import logger, save_logging_config
+
 
 # # -*- coding: utf-8 -*-
 # import yaml
@@ -30,6 +34,32 @@
 #     data_loaded = yaml.safe_load(stream)
 #
 # print(data == data_loaded)
+
+FILE_CFG = '../config/model_cfg.yaml'
+
+
+def load_config(filename=None):
+
+    if not filename:
+        filename = FILE_CFG
+
+
+
+    try:
+        with open(filename, 'r') as f:
+            config = yaml.safe_load(f.read())
+            pprint(config)
+
+    except Exception as err:
+        err_text = 'Ошибка при загрузке config file:' + filename
+        logger.exception(err_text)
+        raise Exception(err_text, err)
+
+    logger.info(f'Config file {filename} загружен')
+
+
+load_config()
+
 
 PATH_RAW_DATA = '../data_1/'
 PATH_RAW_DATA_TRAIN = PATH_RAW_DATA + 'train/'

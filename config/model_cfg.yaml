@@ -1,0 +1,24 @@
+
+FILE_MODEL: xgb_model.pkl
+FILE_SCALER: model_scaler.pkl
+
+PATH_DATASET: ../data_1/dataset/
+PATH_MODEL: ../data_1/model/
+PATH_RAW_DATA: ../data_1/
+PATH_RAW_TEST: ../data_1/test/
+PATH_RAW_TRAIN: ../data_1/train/
+
+CHURNED_END_DATE: '2019-10-01'
+CHURNED_START_DATE: '2019-09-01'
+INTER_1:
+- 1
+- 7
+INTER_2:
+- 8
+- 14
+INTER_3:
+- 15
+- 21
+INTER_4:
+- 22
+- 28
