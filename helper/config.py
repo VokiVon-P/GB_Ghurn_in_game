@@ -7,7 +7,7 @@ from os.path import abspath
 from helper.logging import logger, save_logging_config
 
 
-FILE_CFG = '../config/model_cfg.yaml'
+FILE_CFG = './config/model_cfg.yaml'
 
 
 def load_config(filename=None):

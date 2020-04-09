@@ -49,7 +49,7 @@ def make_result(y_predict, userID):
     d = {'user_id': userID, 'is_churned': y_result}
     df_res = pd.DataFrame(data=d)
     try:
-        df_res.to_csv(FILE_MODEL_PREDICTION, sep=FILE_DATASET_SEP)
+        df_res.to_csv(FILE_MODEL_PREDICTION, sep=FILE_DATASET_SEP, index=False)
     except Exception as err:
         logger.exception(f"Ошибка записи файла {FILE_MODEL_PREDICTION}\n")
         raise err
@@ -58,12 +58,12 @@ def make_result(y_predict, userID):
 
 
 
-def main():
+def predict():
     X_pr, userID = load_data_for_predict()
     X_pr_scaled = scale_predict(X_pr)
     y_pr = predict_model(X_pr_scaled)
     make_result(y_pr, userID)
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     predict_model()

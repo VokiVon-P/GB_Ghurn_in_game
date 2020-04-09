@@ -127,7 +127,8 @@ def train_model(X_train, y_train):
                           verbosity=2,
                           n_jobs=-1)
     )
-    #TODO включить после тестирования функционала
+
+    # TODO включить после тестирования функционала
 
     # # print([k for k in xgb_pipe.get_params().keys()])
 
@@ -158,12 +159,12 @@ def train_model(X_train, y_train):
     return estimator
 
 
-def main():
+def train():
     X, y = load_data_for_train()
     X_train_balanced, y_train_balanced = scale_balance_train(X, y)
     model = train_model(X_train_balanced, y_train_balanced)
     save_model(model=model)
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

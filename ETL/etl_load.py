@@ -98,7 +98,7 @@ def build_dataset_raw(churned_start_date,
           format(dataset_raw_filename, time_format(time.time() - start_t)))
 
 
-def main():
+def load():
 
     build_dataset_raw(churned_start_date=CHURNED_START_DATE,
                       churned_end_date=CHURNED_END_DATE,
@@ -115,5 +115,5 @@ def main():
                       mode='test')
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

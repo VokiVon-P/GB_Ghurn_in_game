@@ -42,7 +42,7 @@ def prepare_dataset(dataset,
           format(dataset_filename, time_format(time.time() - start_t)))
 
 
-def main():
+def prepare():
     train = load_data(FILE_DATASET_RAW_TRAIN, sep=FILE_DATASET_SEP)
     test = load_data(FILE_DATASET_RAW_TEST, sep=FILE_DATASET_SEP)
 
@@ -52,5 +52,5 @@ def main():
     prepare_dataset(dataset=test, inter_list=INTER_LIST, dataset_filename=FILE_DATASET_MODEL_TEST)
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
