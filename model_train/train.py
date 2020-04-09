@@ -12,16 +12,16 @@ from sklearn.model_selection import GridSearchCV, StratifiedKFold, cross_validat
 from sklearn.pipeline import make_pipeline
 
 from ETL.etl_config import *
+
 from helper.help_data import load_data
+from helper.help_time import time_it
 
 RANDOM_STATE = 42
 
 
+@time_it
 def run_cv(estimator, cv, X, y, scoring=['f1', 'recall', 'precision'], model_name=""):
     cv_res = cross_validate(estimator, X, y, cv=cv, scoring=scoring, n_jobs=-1)
-
-    # print(cv_res)
-    # print()
 
     print("%s: %s = %0.2f (+/- %0.2f)" % (model_name,
                                           scoring[0],
@@ -37,6 +37,7 @@ def run_cv(estimator, cv, X, y, scoring=['f1', 'recall', 'precision'], model_nam
                                           cv_res['test_recall'].std()))
 
 
+@time_it
 def run_grid_search(estimator, X, y, params_grid, cv, scoring='f1'):
     gsc = GridSearchCV(estimator, params_grid, scoring=scoring, cv=cv, n_jobs=-1)
 
@@ -59,6 +60,7 @@ def run_grid_search(estimator, X, y, params_grid, cv, scoring='f1'):
     return gsc
 
 
+@time_it
 def load_data_for_train():
     path = PATH_DATASET + 'dataset_train.csv'
     df_train = load_data(path, sep=';')
@@ -69,6 +71,7 @@ def load_data_for_train():
     return X, y
 
 
+@time_it
 def save_model(model: object, path_to_save=FILE_MODEL):
     print(path_to_save)
     try:
@@ -79,17 +82,19 @@ def save_model(model: object, path_to_save=FILE_MODEL):
     print('Модель успешно сохранена!')
 
 
+@time_it
 def scale_balance_train(X_tr, y_tr):
     m_scaler = MinMaxScaler()
+    # m_scaler = StandardScaler()
     X_sc = m_scaler.fit_transform(X_tr)
     save_model(m_scaler, FILE_SCALER)
     X_train_balanced, y_train_balanced = SMOTE(random_state=RANDOM_STATE, sampling_strategy=0.2).fit_sample(X_sc, y_tr)
     return X_train_balanced, y_train_balanced
 
 
+@time_it
 def train_model(X_train, y_train):
     kfold_cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=RANDOM_STATE)
-
 
     xgb_estimator = xgb.XGBClassifier(max_depth=3,
                                       n_estimators=100,
@@ -104,12 +109,18 @@ def train_model(X_train, y_train):
                                       missing=1e10,
                                       tree_method='gpu_hist',
                                       n_jobs=-1)
-    run_cv(xgb_estimator, kfold_cv, X_train, y_train, model_name="Base");
+    run_cv(xgb_estimator, kfold_cv, X_train, y_train, model_name="Base")
 
     xgb_pipe = make_pipeline(
-        SelectFromModel(LogisticRegression(solver='liblinear', penalty='l1', random_state=RANDOM_STATE, n_jobs=-1),
+        SelectFromModel(LogisticRegression(solver='liblinear', penalty='l1', random_state=RANDOM_STATE),
                         threshold=1e-5),
-        xgb.XGBClassifier(reg_alpha=0.,
+        xgb.XGBClassifier(n_estimators=500,
+                          max_depth=7,
+                          learning_rate=0.1,
+                          nthread=5,
+                          colsample_bytree=0.5,
+                          subsample=0.75,
+                          reg_alpha=0.,
                           reg_lambda=0.,
                           seed=RANDOM_STATE,
                           missing=1e10,
@@ -117,37 +128,32 @@ def train_model(X_train, y_train):
                           verbosity=2,
                           n_jobs=-1)
     )
+
     # print([k for k in xgb_pipe.get_params().keys()])
 
-    param_grid = [
-        {"selectfrommodel__max_features": [None, 15, 30, 45, 60], "selectfrommodel__threshold": [-np.inf]},
-        {"selectfrommodel__threshold": [1e-5]},
-        {'xgbclassifier__colsample_bytree': [0.5, 0.8]},
-        {'xgbclassifier__subsample': [0.75, 1.]},
-        {'xgbclassifier__learning_rate': [0.1, 0.05]},
-        {'xgbclassifier__max_depth': [3, 5, 7]},
-        {'xgbclassifier__n_estimators': [100, 200, 500]},
-    ]
+    param_grid = {
+            'xgbclassifier__colsample_bytree': [0.5, 0.8],
+            'xgbclassifier__subsample': [0.7, 0.5],
+            'xgbclassifier__learning_rate': [0.1, 0.01],
+            'xgbclassifier__max_depth': [5, 7, 9],
+            'xgbclassifier__n_estimators': [200, 400, 500, 700]
+    }
 
     xgb_gsc = run_grid_search(xgb_pipe, X_train, y_train, param_grid, kfold_cv)
 
-    print(25*'=*')
+    print(25 * '==')
     print(xgb_gsc.best_params_)
-    print(25 * '+*')
+    print(25 * '==')
 
     xgb_final = xgb_gsc.best_estimator_
 
-    run_cv(xgb_final, kfold_cv, X_train, y_train, model_name="Final");
+    # xgb_final = xgb_pipe
+    run_cv(xgb_final, kfold_cv, X_train, y_train, model_name="Final")
 
-    # gb_pipe = make_pipeline(
-    #
-    #     GradientBoostingClassifier(random_state=RANDOM_STATE)
-    # )
-
-    # clf.fit(X_train, y_train, eval_metric='aucpr', verbose=True)
+    # xgb_estimator.fit(X_train, y_train, eval_metric='aucpr', verbose=True)
+    # estimator = xgb_estimator
 
     estimator = xgb_final
-
     estimator.fit(X_train, y_train)
     return estimator
 
