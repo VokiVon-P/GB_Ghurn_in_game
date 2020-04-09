@@ -3,38 +3,6 @@ from pprint import pprint
 from helper.logging import logger, save_logging_config
 
 
-# # -*- coding: utf-8 -*-
-# import yaml
-# import io
-#
-# # Define data
-# data = {
-#     'a list': [
-#         1,
-#         42,
-#         3.141,
-#         1337,
-#         'help',
-#         u'€'
-#     ],
-#     'a string': 'bla',
-#     'another dict': {
-#         'foo': 'bar',
-#         'key': 'value',
-#         'the answer': 42
-#     }
-# }
-#
-# # Write YAML file
-# with io.open('data.yaml', 'w', encoding='utf8') as outfile:
-#     yaml.dump(data, outfile, default_flow_style=False, allow_unicode=True)
-#
-# # Read YAML file
-# with open("data.yaml", 'r') as stream:
-#     data_loaded = yaml.safe_load(stream)
-#
-# print(data == data_loaded)
-
 FILE_CFG = '../config/model_cfg.yaml'
 
 
@@ -43,12 +11,10 @@ def load_config(filename=None):
     if not filename:
         filename = FILE_CFG
 
-
-
     try:
         with open(filename, 'r') as f:
-            config = yaml.safe_load(f.read())
-            pprint(config)
+            cfg = yaml.safe_load(f.read())
+            #pprint(config)
 
     except Exception as err:
         err_text = 'Ошибка при загрузке config file:' + filename
@@ -56,24 +22,37 @@ def load_config(filename=None):
         raise Exception(err_text, err)
 
     logger.info(f'Config file {filename} загружен')
+    return cfg
 
 
-load_config()
+config = load_config()
+
+pprint(config)
 
 
-PATH_RAW_DATA = '../data_1/'
-PATH_RAW_DATA_TRAIN = PATH_RAW_DATA + 'train/'
-PATH_RAW_DATA_TEST = PATH_RAW_DATA + 'test/'
+PATH_RAW_DATA = config['PATH_RAW_DATA']
+PATH_RAW_DATA_TRAIN = config['PATH_RAW_TRAIN']
+PATH_RAW_DATA_TEST = config['PATH_RAW_TEST']
 
-PATH_DATASET = PATH_RAW_DATA + 'dataset/'
+PATH_DATASET = config['PATH_DATASET']
 
-PATH_MODEL = PATH_RAW_DATA + 'model/'
-FILE_MODEL = PATH_MODEL + 'xgb_model.pkl'
-FILE_SCALER = PATH_MODEL + 'model_scaler.pkl'
+FILE_DATASET_SEP = config['datasets']['sep']
+
+train_dict = config['datasets']['train']
+FILE_DATASET_RAW_TRAIN = train_dict['path']+train_dict['file_raw']
+FILE_DATASET_MODEL_TRAIN = train_dict['path']+train_dict['file_model']
+
+test_dict = config['datasets']['train']
+FILE_DATASET_RAW_TEST = test_dict['path']+test_dict['file_raw']
+FILE_DATASET_MODEL_TEST = test_dict['path']+test_dict['file_model']
+
+PATH_MODEL = config['PATH_MODEL']
+FILE_MODEL = PATH_MODEL + config['FILE_MODEL']
+FILE_SCALER = PATH_MODEL + config['FILE_SCALER']
 
 # Следует из исходных данных
-CHURNED_START_DATE = '2019-09-01'
-CHURNED_END_DATE = '2019-10-01'
+CHURNED_START_DATE = config['CHURNED_START_DATE']
+CHURNED_END_DATE = config['CHURNED_END_DATE']
 
 INTER_1 = (1, 7)
 INTER_2 = (8, 14)

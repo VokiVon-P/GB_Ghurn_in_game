@@ -8,6 +8,18 @@ PATH_RAW_DATA: ../data_1/
 PATH_RAW_TEST: ../data_1/test/
 PATH_RAW_TRAIN: ../data_1/train/
 
+datasets:
+  train:
+    path: ../data_1/dataset/
+    file_raw: dataset_raw_train.csv
+    file_model: dataset_train.csv
+  test:
+    path: ../data_1/dataset/
+    file_raw: dataset_raw_test.csv
+    file_model: dataset_test.csv
+  sep: ;
+
+
 CHURNED_END_DATE: '2019-10-01'
 CHURNED_START_DATE: '2019-09-01'
 INTER_1:
