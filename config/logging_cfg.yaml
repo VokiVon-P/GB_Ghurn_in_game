@@ -1,14 +1,14 @@
 disable_existing_loggers: false
 formatters:
   std_format:
-    format: '{asctime} - {levelname} - {name} - {message}'
+    format: '{asctime} -{levelname} - {name} - {module}:{funcName}:{lineno} - {message}'
     style: '{'
 handlers:
   console:
     class: logging.StreamHandler
     formatter: std_format
     level: DEBUG
-    stream: ext://sys.stdout
+    # stream: ext://sys.stdout
 loggers:
   model_logger:
     handlers:
