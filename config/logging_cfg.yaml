@@ -1,0 +1,21 @@
+disable_existing_loggers: false
+formatters:
+  std_format:
+    format: '{asctime} - {levelname} - {name} - {message}'
+    style: '{'
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: std_format
+    level: DEBUG
+    # stream: ext://sys.stdout
+loggers:
+  model_logger:
+    handlers:
+    - console
+    level: DEBUG
+    propagate: False
+root:
+  level: WARNING
+  handlers: [console]
+version: 1
