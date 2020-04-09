@@ -128,26 +128,27 @@ def train_model(X_train, y_train):
                           verbosity=2,
                           n_jobs=-1)
     )
+    #TODO включить после тестирования функционала
 
-    # print([k for k in xgb_pipe.get_params().keys()])
+    # # print([k for k in xgb_pipe.get_params().keys()])
 
-    param_grid = {
-            'xgbclassifier__colsample_bytree': [0.5, 0.8],
-            'xgbclassifier__subsample': [0.7, 0.5],
-            'xgbclassifier__learning_rate': [0.1, 0.01],
-            'xgbclassifier__max_depth': [5, 7, 9],
-            'xgbclassifier__n_estimators': [200, 400, 500, 700]
-    }
+    # param_grid = {
+    #         # 'xgbclassifier__colsample_bytree': [0.5, 0.8],
+    #         'xgbclassifier__subsample': [0.7, 0.5],
+    #         'xgbclassifier__learning_rate': [0.1, 0.01],
+    #         'xgbclassifier__max_depth': [5, 7, 9],
+    #         'xgbclassifier__n_estimators': [400, 500, 700]
+    # }
+    #
+    # xgb_gsc = run_grid_search(xgb_pipe, X_train, y_train, param_grid, kfold_cv)
+    #
+    # print(25 * '==')
+    # print(xgb_gsc.best_params_)
+    # print(25 * '==')
+    #
+    # xgb_final = xgb_gsc.best_estimator_
 
-    xgb_gsc = run_grid_search(xgb_pipe, X_train, y_train, param_grid, kfold_cv)
-
-    print(25 * '==')
-    print(xgb_gsc.best_params_)
-    print(25 * '==')
-
-    xgb_final = xgb_gsc.best_estimator_
-
-    # xgb_final = xgb_pipe
+    xgb_final = xgb_pipe
     run_cv(xgb_final, kfold_cv, X_train, y_train, model_name="Final")
 
     # xgb_estimator.fit(X_train, y_train, eval_metric='aucpr', verbose=True)
