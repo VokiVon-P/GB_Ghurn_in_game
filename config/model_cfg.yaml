@@ -19,18 +19,13 @@ datasets:
     file_model: dataset_test.csv
   sep: ;
 
+model_threshold: 0.5
 
 CHURNED_END_DATE: '2019-10-01'
 CHURNED_START_DATE: '2019-09-01'
-INTER_1:
-- 1
-- 7
-INTER_2:
-- 8
-- 14
-INTER_3:
-- 15
-- 21
-INTER_4:
-- 22
-- 28
+
+INTERLIST:
+  - [1, 7]
+  - [ 8, 14]
+  - [15, 21]
+  - [22, 28]

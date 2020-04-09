@@ -7,13 +7,14 @@ from helper.logging import logger
 
 
 def load_data_for_predict():
-    path = PATH_DATASET + 'dataset_test.csv'
+    path = FILE_DATASET_MODEL_TEST
 
-    df_predict = load_data(path, sep=';')
+    df_predict = load_data(path, sep=FILE_DATASET_SEP)
     assert isinstance(df_predict, pd.DataFrame)
 
     X = df_predict.drop(['user_id'], axis=1)
-    return X
+    usersID = df_predict['user_id']
+    return X, usersID
 
 
 def load_model(path_to_load=FILE_MODEL):
@@ -39,13 +40,20 @@ def predict_model(X_predict):
     logger.debug(f'predict модель: {type(clf)}')
     y_pred = clf.predict_proba(X_predict)
     logger.debug(f'результат predict_proba = {y_pred.shape}')
+    return y_pred
+
+
+def make_result(y_predict, userID):
+    y_result = (~(y_predict[:, 1] < MODEL_THRESHOLD)).astype('int')
+    print(y_result.shape)
+    print(y_result[:10])
 
 
 def main():
-    X_pr = load_data_for_predict()
+    X_pr, userID = load_data_for_predict()
     X_pr_scaled = scale_predict(X_pr)
-    model = predict_model(X_pr_scaled)
-    #save_model(model=model)
+    y_pr = predict_model(X_pr_scaled)
+    make_result(y_pr, userID)
 
 
 if __name__ == '__main__':

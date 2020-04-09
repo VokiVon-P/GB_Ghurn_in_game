@@ -26,11 +26,9 @@ def load_config(filename=None):
 
 
 config = load_config()
+# pprint(config)
 
-pprint(config)
 
-
-PATH_RAW_DATA = config['PATH_RAW_DATA']
 PATH_RAW_DATA_TRAIN = config['PATH_RAW_TRAIN']
 PATH_RAW_DATA_TEST = config['PATH_RAW_TEST']
 
@@ -42,7 +40,7 @@ train_dict = config['datasets']['train']
 FILE_DATASET_RAW_TRAIN = train_dict['path']+train_dict['file_raw']
 FILE_DATASET_MODEL_TRAIN = train_dict['path']+train_dict['file_model']
 
-test_dict = config['datasets']['train']
+test_dict = config['datasets']['test']
 FILE_DATASET_RAW_TEST = test_dict['path']+test_dict['file_raw']
 FILE_DATASET_MODEL_TEST = test_dict['path']+test_dict['file_model']
 
@@ -50,12 +48,16 @@ PATH_MODEL = config['PATH_MODEL']
 FILE_MODEL = PATH_MODEL + config['FILE_MODEL']
 FILE_SCALER = PATH_MODEL + config['FILE_SCALER']
 
+MODEL_THRESHOLD = config['model_threshold']
+
 # Следует из исходных данных
 CHURNED_START_DATE = config['CHURNED_START_DATE']
 CHURNED_END_DATE = config['CHURNED_END_DATE']
 
-INTER_1 = (1, 7)
-INTER_2 = (8, 14)
-INTER_3 = (15, 21)
-INTER_4 = (22, 28)
-INTER_LIST = [INTER_1, INTER_2, INTER_3, INTER_4]
+INTER_LIST = config['INTERLIST']
+
+# INTER_1 = (1, 7)
+# INTER_2 = (8, 14)
+# INTER_3 = (15, 21)
+# INTER_4 = (22, 28)
+# INTER_LIST = [INTER_1, INTER_2, INTER_3, INTER_4]

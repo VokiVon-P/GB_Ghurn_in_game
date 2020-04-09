@@ -34,11 +34,11 @@ def etl_loop(func):
 
 
 @etl_loop
-def build_dataset_raw(churned_start_date='2019-01-01',
-                      churned_end_date='2019-02-01',
-                      inter_list=[(1, 7), (8, 14)],
-                      raw_data_path='train/',
-                      dataset_path='dataset/',
+def build_dataset_raw(churned_start_date,
+                      churned_end_date,
+                      inter_list,
+                      raw_data_path,
+                      dataset_raw_filename,
                       mode='train'):
     start_t = time.time()
     print('Start reading csv files: {}'.format(datetime.now()))
@@ -93,9 +93,9 @@ def build_dataset_raw(churned_start_date='2019-01-01',
     # Добавляем "статические" признаки
     dataset = pd.merge(dataset, profiles, on='user_id')
     # ---------------------------------------------------------------------------------------------------------------------------
-    dataset.to_csv('{}dataset_raw_{}.csv'.format(dataset_path, mode), sep=';', index=False)
+    dataset.to_csv(dataset_raw_filename, sep=FILE_DATASET_SEP, index=False)
     print('Dataset is successfully built and saved to {}, run time "build_dataset_raw": {}'. \
-          format(dataset_path, time_format(time.time() - start_t)))
+          format(dataset_raw_filename, time_format(time.time() - start_t)))
 
 
 def main():
@@ -104,14 +104,14 @@ def main():
                       churned_end_date=CHURNED_END_DATE,
                       inter_list=INTER_LIST,
                       raw_data_path=PATH_RAW_DATA_TRAIN,
-                      dataset_path=PATH_DATASET,
+                      dataset_raw_filename=FILE_DATASET_RAW_TRAIN,
                       mode='train')
 
     build_dataset_raw(churned_start_date=CHURNED_START_DATE,
                       churned_end_date=CHURNED_END_DATE,
                       inter_list=INTER_LIST,
                       raw_data_path=PATH_RAW_DATA_TEST,
-                      dataset_path=PATH_DATASET,
+                      dataset_raw_filename=FILE_DATASET_RAW_TEST,
                       mode='test')
 
 
