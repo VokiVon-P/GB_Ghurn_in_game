@@ -3,7 +3,7 @@ import time
 import pandas as pd
 
 from helper.help_time import time_format
-from ETL.etl_config import *
+from helper.config import *
 
 
 def etl_loop(func):

@@ -1,17 +1,16 @@
 import pandas as pd
-import numpy as np
 import joblib
 
 from imblearn.over_sampling import SMOTE
 from sklearn.feature_selection import SelectFromModel
 from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 import xgboost as xgb
 
 from sklearn.model_selection import GridSearchCV, StratifiedKFold, cross_validate
 from sklearn.pipeline import make_pipeline
 
-from ETL.etl_config import *
+from helper.config import *
 
 from helper.help_data import load_data
 from helper.help_time import time_it

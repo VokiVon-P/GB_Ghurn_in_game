@@ -8,7 +8,7 @@ handlers:
     class: logging.StreamHandler
     formatter: std_format
     level: DEBUG
-    # stream: ext://sys.stdout
+    stream: ext://sys.stdout
 loggers:
   model_logger:
     handlers:

@@ -5,6 +5,7 @@ from pprint import pprint
 
 FILE_LOGGING_CFG = '../config/logging_cfg.yaml'
 
+
 def load_logging_config(filename=None):
 
     if not filename:
