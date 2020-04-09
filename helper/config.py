@@ -1,5 +1,9 @@
+
 import yaml
 from pprint import pprint
+from os.path import abspath
+
+
 from helper.logging import logger, save_logging_config
 
 
@@ -47,6 +51,8 @@ FILE_DATASET_MODEL_TEST = test_dict['path']+test_dict['file_model']
 PATH_MODEL = config['PATH_MODEL']
 FILE_MODEL = PATH_MODEL + config['FILE_MODEL']
 FILE_SCALER = PATH_MODEL + config['FILE_SCALER']
+
+FILE_MODEL_PREDICTION = abspath(config['datasets']['predict']['path'] + config['datasets']['predict']['file_predict'])
 
 MODEL_THRESHOLD = config['model_threshold']
 

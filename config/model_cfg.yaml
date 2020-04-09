@@ -17,6 +17,9 @@ datasets:
     path: ../data_1/dataset/
     file_raw: dataset_raw_test.csv
     file_model: dataset_test.csv
+  predict:
+    path: ../result/
+    file_predict: prediction_result.csv
   sep: ;
 
 model_threshold: 0.5

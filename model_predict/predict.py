@@ -44,9 +44,18 @@ def predict_model(X_predict):
 
 
 def make_result(y_predict, userID):
+    # созданю результат классификатора на осное порога MODEL_THRESHOLD
     y_result = (~(y_predict[:, 1] < MODEL_THRESHOLD)).astype('int')
-    print(y_result.shape)
-    print(y_result[:10])
+    d = {'user_id': userID, 'is_churned': y_result}
+    df_res = pd.DataFrame(data=d)
+    try:
+        df_res.to_csv(FILE_MODEL_PREDICTION, sep=FILE_DATASET_SEP)
+    except Exception as err:
+        logger.exception(f"Ошибка записи файла {FILE_MODEL_PREDICTION}\n")
+        raise err
+
+    logger.info(f'Результат работы модели {df_res.shape} записан в: {FILE_MODEL_PREDICTION}')
+
 
 
 def main():

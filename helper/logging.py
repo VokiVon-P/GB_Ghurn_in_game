@@ -28,7 +28,8 @@ def save_logging_config(log_conf: dict, filename=None):
             yaml.dump(log_conf, f_n, allow_unicode=True, default_flow_style=False)
 
     except Exception as err:
-        print(f"Ошибка записи файла {filename}\n", err)
+        logger.exception(f"Ошибка записи файла {filename}\n")
+        raise err
 
 
 load_logging_config()
